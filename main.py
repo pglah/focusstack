@@ -1,6 +1,8 @@
 import os
 import cv2
+import sys
 import FocusStack
+from read_images import ImageReader
 """
 
     Focus stack driver program
@@ -17,21 +19,25 @@ import FocusStack
 """
 
 
-def stackHDRs(image_files):
-    focusimages = []
+def remove_images_having_wrong_type(image_files):
     for img in image_files:
-        print(f"Reading in file {img}")
-        focusimages.append(cv2.imread(f"input/{img}"))
+        if img.split('.')[-1].lower() not in ['jpg', 'jpeg', 'png']:
+            image_files.remove(img)
 
+
+def stackHDRs(image_files):
+    images = ImageReader(image_files)
+    focusimages = images.read()
     merged = FocusStack.focus_stack(focusimages)
     cv2.imwrite("merged.png", merged)
 
 
 if __name__ == "__main__":
-    image_files = sorted(os.listdir("input"))
-    for img in image_files:
-        if img.split(".")[-1].lower() not in ["jpg", "jpeg", "png"]:
-            image_files.remove(img)
+    if len(sys.argv) > 1:
+        pass
+    else:
+        image_files = sorted(os.listdir('input'))
+        remove_images_having_wrong_type(image_files)
 
     stackHDRs(image_files)
-    print("That's All Folks!")
+    print('Done!')

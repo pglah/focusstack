@@ -46,7 +46,7 @@ def findHomography(image_1_kp, image_2_kp, matches):
         image_1_points[i] = image_1_kp[matches[i].queryIdx].pt
         image_2_points[i] = image_2_kp[matches[i].trainIdx].pt
 
-    homography, mask = cv2.findHomography(
+    homography, _ = cv2.findHomography(
         image_1_points, image_2_points, cv2.RANSAC, ransacReprojThreshold=2.0)
 
     return homography
@@ -109,7 +109,7 @@ def align_images(images):
 #   Compute the gradient map of the image
 
 
-def doLap(image):
+def compute_gradient(image):
 
     # YOU SHOULD TUNE THESE VALUES TO SUIT YOUR NEEDS
     kernel_size = 5         # Size of the laplacian window
@@ -132,7 +132,8 @@ def focus_stack(unimages):
     laps = []
     for i in range(len(images)):
         print(f"Lap {i}")
-        laps.append(doLap(cv2.cvtColor(images[i], cv2.COLOR_BGR2GRAY)))
+        laps.append(compute_gradient(
+            cv2.cvtColor(images[i], cv2.COLOR_BGR2GRAY)))
 
     laps = np.asarray(laps)
     print(f"Shape of array of laplacians = {laps.shape}")
