@@ -1,5 +1,6 @@
 import os
 import cv2
+import rawpy
 
 
 class ImageReader():
@@ -14,7 +15,7 @@ class ImageReader():
             if image_type in ['png', 'jpg', 'jpeg']:
                 image = self._read_with_open_cv(image)
             elif image_type == 'raw':
-                image = self._read_as_matrice(image)
+                image = self._read_with_rawpy(image)
             else:
                 raise Exception('Image Type not supported')
 
@@ -25,5 +26,5 @@ class ImageReader():
     def _read_with_open_cv(self, image):
         return cv2.imread(f'input/{image}')
 
-    def _read_as_matrice(self, image):
-        pass
+    def _read_with_rawpy(self, image):
+        return rawpy.imread(f'input/{image}')

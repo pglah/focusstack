@@ -33,8 +33,10 @@ def stackHDRs(image_files):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        pass
+    print(sys.argv)
+    if len(sys.argv) > 1 and sys.argv[1] == 'raw':
+        image_files = sorted(os.listdir('input'))
+        remove_images_having_wrong_type(image_files)
     else:
         image_files = sorted(os.listdir('input'))
         remove_images_having_wrong_type(image_files)
